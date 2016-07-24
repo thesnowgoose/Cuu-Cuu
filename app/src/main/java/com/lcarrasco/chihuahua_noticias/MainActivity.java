@@ -20,6 +20,8 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity
         implements CardsListFragment.OnCardSelected {
 
+    private SwipeRefreshLayout swipeContainer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +53,19 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
+        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
+        if (swipeContainer != null) {
+            swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    // Your code to refresh the list here.
+                    // Make sure you call swipeContainer.setRefreshing(false)
+                    // once the network request has completed successfully.
+                    buildNewsRequest(null);
+                }
+            });
+
+        }
     }
 
     @Override
@@ -92,6 +107,8 @@ public class MainActivity extends AppCompatActivity
             public void onFinishLoading(List<News> newsList) {
                 CardsListFragment cardsListFragment = CardsListFragment.getInstance(newsList);
                 cardsListFragment.updateList();
+                if (query == null)
+                    swipeContainer.setRefreshing(false);
             }
         });
     }
