@@ -21,8 +21,6 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity
         implements CardsListFragment.OnCardSelected {
 
-    CircleRefreshLayout refreshLayout;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,19 +52,6 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
-
-        refreshLayout = (CircleRefreshLayout) findViewById(R.id.refresh_layout);
-        if (refreshLayout != null) {
-            refreshLayout.setOnRefreshListener(new CircleRefreshLayout.OnCircleRefreshListener() {
-                @Override
-                public void completeRefresh() { }
-
-                @Override
-                public void refreshing() {
-                    buildNewsRequest(null);
-                }
-            });
-        }
     }
 
     @Override
@@ -108,8 +93,6 @@ public class MainActivity extends AppCompatActivity
             public void onFinishLoading(List<News> newsList) {
                 CardsListFragment cardsListFragment = CardsListFragment.getInstance(newsList);
                 cardsListFragment.updateList();
-                if (query == null)
-                refreshLayout.finishRefreshing();
             }
         });
     }
