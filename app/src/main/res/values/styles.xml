@@ -1,0 +1,50 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="ToolbarTheme" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="actionMenuTextColor">@android:color/white</item>
+        <item name="selectableItemBackground">?android:selectableItemBackground</item>
+        <item name="selectableItemBackgroundBorderless">?android:selectableItemBackground</item>
+    </style>
+
+    <!-- This configures the styles for the title within the Toolbar -->
+    <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">21sp</item>
+        <!--<item name="android:textStyle">italic</item>-->
+    </style>
+
+    <style name="TitleFont" parent="GeneralTextViewTheme" >
+        <item name="android:fontFamily">sans-serif-thin</item>
+        <item name="android:textColor">@color/whiteDark</item>
+        <item name="android:textSize">@dimen/titleSize</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:background">@color/grayTransparent</item>
+    </style>
+
+    <style name="GeneralTextViewTheme" parent="android:Widget.TextView" >
+        <item name="android:padding">10dp</item>
+        <item name="android:textSize">@dimen/textSize</item>
+    </style>
+
+    <style name="UrlSource" parent="GeneralTextViewTheme" >
+        <item name="android:textColor">@color/red</item>
+        <item name="android:layout_marginLeft">-15dp</item>
+    </style>
+
+    <style name="CategoryTheme" parent="android:Widget.TextView" >
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:background">#22282b</item>
+        <item name="android:layout_margin">5dp</item>
+        <item name="android:padding">3dp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+</resources>

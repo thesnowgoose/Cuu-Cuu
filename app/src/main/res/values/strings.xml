@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">Cuu Cuu!</string>
+    <string name="search">search</string>
+    <string name="share">share</string>
+
+    <string name="source">Fuente: </string>
+    <string name="loading">Cargando...</string>
+    <string name="noNewsDetected">No se pudo encontar noticas</string>
+
+    <string name="base_url" translatable="false">http://cuu.herokuapp.com/</string>
+    <string name="msg_apiFailed">No es posible conectarse con el servidor.</string>
+
+    <string name="ex_title">Analiza Auditoría de la Federación información financiera de Chihuahua</string>
+    <string name="ex_content">El titular de la Auditoría Superior de la Federación (ASF), Juan Manuel Portal, informó que actualmente se trabaja en el análisis de información financiera...</string>
+    <string name="ex_date">5 de julio de 2016</string>
+    <string name="ex_image" translatable="false">http://entrelineas.com.mx/wp-content/uploads/2016/07/juan-manuel-portal-al-4-570x399.jpg</string>
+    <string name="ex_url">http://nortedigital.mx/</string>
+    <string name="ex_category">Política</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="fragment_cards">fragment_cards</string>
+    <string name="fragment_details">fragment_details</string>
+    <string name="news_details">news_details</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+</resources>
