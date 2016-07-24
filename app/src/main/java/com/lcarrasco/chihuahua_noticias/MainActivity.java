@@ -14,7 +14,6 @@ import android.view.View;
 import com.google.gson.Gson;
 import com.lcarrasco.data.LoadNews;
 import com.lcarrasco.model.News;
-import com.tuesda.walker.circlerefresh.CircleRefreshLayout;
 
 import java.util.List;
 

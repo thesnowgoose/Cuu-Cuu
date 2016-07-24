@@ -31,5 +31,4 @@ dependencies {
     compile 'com.squareup.retrofit2:retrofit:2.0.2'
     compile 'com.squareup.retrofit2:converter-gson:2.0.2'
     compile 'com.github.bluejamesbond:textjustify-android:2.1.6'
-    compile project(':circlerefresh')
 }
