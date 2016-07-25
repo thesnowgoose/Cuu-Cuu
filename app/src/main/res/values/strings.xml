@@ -6,6 +6,7 @@
     <string name="source">Fuente: </string>
     <string name="loading">Cargando...</string>
     <string name="noNewsDetected">No se pudo encontar noticas</string>
+    <string name="sharedCuuCuu">Compartido por CuuCuu</string>
 
     <string name="base_url" translatable="false">http://cuu.herokuapp.com/</string>
     <string name="msg_apiFailed">No es posible conectarse con el servidor.</string>

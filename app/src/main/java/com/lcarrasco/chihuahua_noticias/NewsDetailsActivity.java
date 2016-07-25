@@ -1,5 +1,6 @@
 package com.lcarrasco.chihuahua_noticias;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -19,6 +20,8 @@ import com.lcarrasco.model.News;
 
 public class NewsDetailsActivity extends AppCompatActivity {
 
+    private News currentNews;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,7 +32,7 @@ public class NewsDetailsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Bundle bundle = getIntent().getExtras();
-        News currentNews = new Gson()
+        currentNews = new Gson()
                     .fromJson(bundle
                             .getString(getString(R.string.news_details)),
                             News.class);
@@ -50,7 +53,6 @@ public class NewsDetailsActivity extends AppCompatActivity {
         titleTV.setText(currentNews.getTitle());
         dateTV.setText(NewsUtils.getDate(currentNews.getCreatedAt()));
         newsDesc.setText(Html.fromHtml(currentNews.getContent()));
-//        newsDesc.getFontFeatureSettings();
         description.setText(Html.fromHtml(currentNews.getContent()));
 
 
@@ -73,8 +75,19 @@ public class NewsDetailsActivity extends AppCompatActivity {
             case android.R.id.home:
                 this.finish();
                 return true;
+            case R.id.action_share:
+                shareNews();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void shareNews() {
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, currentNews.getUrl() + "\n" + getString(R.string.sharedCuuCuu));
+        shareIntent.setType("text/plain");
+        startActivity(shareIntent);
     }
 }
