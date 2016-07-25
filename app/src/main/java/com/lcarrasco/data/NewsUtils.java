@@ -30,7 +30,7 @@ public class NewsUtils {
         Pattern regex = Pattern.compile("([\\da-z\\.-]+[a-z\\.]{2,6})\\/");
         Matcher simpleSource = regex.matcher(source);
         simpleSource.find();
-        return  simpleSource.group(1);
+        return "<a href=\""+ source + "\">" + simpleSource.group(1) + "</a>";
     }
 
     public static String getDate(String createdAt) {

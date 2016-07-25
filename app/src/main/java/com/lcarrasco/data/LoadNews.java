@@ -28,7 +28,7 @@ public class LoadNews {
         void onFinishLoading(List<News> newsList);
     }
 
-    public static void buildNewsRequest(Context context, String query, final OnFinishLoading loading) {
+    public static void buildNewsRequest(Context context, String query, int id, final OnFinishLoading loading) {
         finish = loading;
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -38,7 +38,10 @@ public class LoadNews {
 
         Call<List<News>> newsListCall;
 
-        if (query == null)
+        if (id != 0)
+            newsListCall = retrofit.create(INewsApp.class)
+                    .getNextGroupOfNews(id);
+        else if (query == null)
             newsListCall = retrofit.create(INewsApp.class)
                     .getNewsList();
         else

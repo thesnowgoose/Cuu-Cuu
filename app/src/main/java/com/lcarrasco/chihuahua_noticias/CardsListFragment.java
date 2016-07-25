@@ -37,8 +37,10 @@ public class CardsListFragment extends Fragment {
 
     private static CardsListFragment instance;
     static OnCardSelected cardSelectedListener;
+    static OnListBottomReached bottomReachedListener;
     private static List<News> newsList;
     private CardAdapter adapter;
+    private int lastid;
 
     public static CardsListFragment getInstance(List<News> news) {
         if (instance == null)
@@ -55,13 +57,18 @@ public class CardsListFragment extends Fragment {
         void onCardSelected(News clickedNew);
     }
 
+    public interface OnListBottomReached {
+        void onListBottomReached(int id);
+    }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        if (context instanceof OnCardSelected) {
+        if (context instanceof OnCardSelected)
             cardSelectedListener = (OnCardSelected) context;
-        }
+        if (context instanceof  OnListBottomReached)
+            bottomReachedListener = (OnListBottomReached) context;
     }
 
     @Override
@@ -84,7 +91,13 @@ public class CardsListFragment extends Fragment {
 
                 @Override
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-
+                    int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager())
+                            .findLastCompletelyVisibleItemPosition();
+                    if (lastVisibleItemPosition != RecyclerView.NO_POSITION &&
+                        lastVisibleItemPosition == recyclerView.getAdapter().getItemCount() - 1) {
+                        lastid = adapter.getLastID();
+                        bottomReachedListener.onListBottomReached(lastid);
+                    }
                 }
             });
         } catch (Exception e) {
@@ -94,9 +107,9 @@ public class CardsListFragment extends Fragment {
         return view;
     }
 
-    public void updateList() {
+    public void updateList(boolean increaseList) {
         if (adapter != null) {
-            adapter.setNewList(newsList, getContext());
+            adapter.setNewList(increaseList, newsList, getContext());
             adapter.notifyDataSetChanged();
         }
     }

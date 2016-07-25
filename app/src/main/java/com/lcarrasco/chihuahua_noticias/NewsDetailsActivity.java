@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -44,7 +45,8 @@ public class NewsDetailsActivity extends AppCompatActivity {
 
         draweeView.setImageURI(NewsUtils.getImageUri(currentNews.getThumbnail()));
         categoryTV.setText(currentNews.getCategory());
-        urlSrcTV.setText(NewsUtils.getSource(currentNews.getUrl()));
+        urlSrcTV.setText(Html.fromHtml(NewsUtils.getSource(currentNews.getUrl())));
+        urlSrcTV.setMovementMethod(LinkMovementMethod.getInstance());
         titleTV.setText(currentNews.getTitle());
         dateTV.setText(NewsUtils.getDate(currentNews.getCreatedAt()));
         newsDesc.setText(Html.fromHtml(currentNews.getContent()));

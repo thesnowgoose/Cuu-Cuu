@@ -18,9 +18,11 @@ import com.lcarrasco.model.News;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
-        implements CardsListFragment.OnCardSelected {
+        implements CardsListFragment.OnCardSelected,
+                   CardsListFragment.OnListBottomReached {
 
     private SwipeRefreshLayout swipeContainer;
+    private int NO_INCREASE_NEWS_LIST = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +34,7 @@ public class MainActivity extends AppCompatActivity
         final LoadingDialogFragment dialogFragment = new LoadingDialogFragment();
         dialogFragment.show(getSupportFragmentManager(), "Sample Fragment");
 
-        LoadNews.buildNewsRequest(this, null, new LoadNews.OnFinishLoading() {
+        LoadNews.buildNewsRequest(this, null, NO_INCREASE_NEWS_LIST, new LoadNews.OnFinishLoading() {
             @Override
             public void onFinishLoading(List<News> newsList) {
                 if (dialogFragment.isVisible())
@@ -55,16 +57,14 @@ public class MainActivity extends AppCompatActivity
         });
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
         if (swipeContainer != null) {
+            swipeContainer.setDistanceToTriggerSync(200);
+            swipeContainer.setColorSchemeResources(R.color.colorPrimaryDark);
             swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
-                    // Your code to refresh the list here.
-                    // Make sure you call swipeContainer.setRefreshing(false)
-                    // once the network request has completed successfully.
-                    buildNewsRequest(null);
+                    buildNewsRequest(null, NO_INCREASE_NEWS_LIST);
                 }
             });
-
         }
     }
 
@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public boolean onQueryTextSubmit(String query) {
-                buildNewsRequest(query);
+                buildNewsRequest(query, NO_INCREASE_NEWS_LIST);
                 return false;
             }
         });
@@ -94,19 +94,19 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
-                buildNewsRequest(null);
+                buildNewsRequest(null, NO_INCREASE_NEWS_LIST);
                 return true;
             }
         });
         return true;
     }
 
-    private void buildNewsRequest(final String query) {
-        LoadNews.buildNewsRequest(getApplicationContext(), query, new LoadNews.OnFinishLoading() {
+    private void buildNewsRequest(final String query, final int id) {
+        LoadNews.buildNewsRequest(getApplicationContext(), query, id, new LoadNews.OnFinishLoading() {
             @Override
             public void onFinishLoading(List<News> newsList) {
                 CardsListFragment cardsListFragment = CardsListFragment.getInstance(newsList);
-                cardsListFragment.updateList();
+                cardsListFragment.updateList(id != NO_INCREASE_NEWS_LIST);
                 if (query == null)
                     swipeContainer.setRefreshing(false);
             }
@@ -118,5 +118,10 @@ public class MainActivity extends AppCompatActivity
         Intent intent = new Intent(this, NewsDetailsActivity.class);
         intent.putExtra(getString(R.string.news_details), new Gson().toJson(clickedNew));
         startActivity(intent);
+    }
+
+    @Override
+    public void onListBottomReached(int id) {
+        buildNewsRequest(null, id);
     }
 }

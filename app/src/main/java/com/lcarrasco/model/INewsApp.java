@@ -4,6 +4,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.PATCH;
 import retrofit2.http.Path;
 
 /**
@@ -15,4 +16,7 @@ public interface INewsApp {
 
     @GET("api/search/{text}")
     Call<List<News>>getSearchedNewsList(@Path("text") String text);
+
+    @GET("api/range/{last_id}")
+    Call<List<News>>getNextGroupOfNews(@Path("last_id") int id);
 }

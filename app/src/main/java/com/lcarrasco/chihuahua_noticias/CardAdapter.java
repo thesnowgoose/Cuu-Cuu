@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,7 +56,8 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
 
             draweeView.setImageURI(imageUrl);
             categoryTV.setText(category);
-            urlSrcTV.setText(urlSource);
+            urlSrcTV.setText(Html.fromHtml(urlSource));
+            urlSrcTV.setMovementMethod(LinkMovementMethod.getInstance());
             titleTV.setText(title);
             dateTV.setText(date);
 
@@ -98,9 +101,18 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
         return newsList.size();
     }
 
-    public void setNewList(List<News> models, Context context) {
-        newsList = new ArrayList<>(models);
+    public void setNewList(boolean increaseList, List<News> models, Context context) {
+        if (increaseList) {
+            newsList = new ArrayList<>(newsList);
+            newsList.addAll(models);
+        } else
+            newsList = new ArrayList<>(models);
+
         if (newsList.size() == 0)
             Toast.makeText(context, context.getString(R.string.noNewsDetected), Toast.LENGTH_SHORT).show();
+    }
+
+    int getLastID() {
+        return newsList.get(newsList.size() - 1).getArticleId();
     }
 }
