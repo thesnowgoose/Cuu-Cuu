@@ -1,6 +1,8 @@
 package com.lcarrasco.chihuahua_noticias;
 
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -23,6 +25,11 @@ public class CardsListFragment extends Fragment {
     private static List<News> newsList;
     private CardAdapter adapter;
     private int lastid;
+
+    private Button btn_toTop;
+
+    private int mAnimationDuration;
+    private boolean isButtonToTopVisible;
 
     public static CardsListFragment getInstance(List<News> news) {
         if (instance == null)
@@ -57,10 +64,13 @@ public class CardsListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        mAnimationDuration = getResources().getInteger(
+                android.R.integer.config_longAnimTime);
+        isButtonToTopVisible = false;
         final Activity activity = getActivity();
         final View view = inflater.inflate(R.layout.fragment_card_list, container, false);
         final RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
-        final Button btn_toTop = (Button) view.findViewById(R.id.btn_toTop);
+        btn_toTop = (Button) view.findViewById(R.id.btn_toTop);
         btn_toTop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,10 +102,14 @@ public class CardsListFragment extends Fragment {
                         bottomReachedListener.onListBottomReached(lastid);
                     }
 
-                    if(dy < 0) // If scrolls upwards
-                        btn_toTop.setVisibility(View.VISIBLE);
-                    else
-                        btn_toTop.setVisibility(View.GONE);
+                    if(dy < 0) { // If scrolls upwards
+                        if (!isButtonToTopVisible) {
+                            fadeIn();
+                        }
+                    }
+                    else {
+                        fadeOut();
+                    }
                 }
             });
         } catch (Exception e) {
@@ -103,6 +117,33 @@ public class CardsListFragment extends Fragment {
         }
 
         return view;
+    }
+
+    private void fadeIn() {
+        btn_toTop.setAlpha(0f);
+        btn_toTop.setVisibility(View.VISIBLE);
+        btn_toTop.animate()
+                 .alpha(1f)
+                 .setDuration(mAnimationDuration)
+                 .setListener(new AnimatorListenerAdapter() {
+                     @Override
+                     public void onAnimationEnd(Animator animation) {
+                         isButtonToTopVisible = true;
+                     }
+                 });
+    }
+
+    private void fadeOut(){
+        btn_toTop.animate()
+                .alpha(0f)
+                .setDuration(mAnimationDuration)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        isButtonToTopVisible = false;
+                        btn_toTop.setVisibility(View.GONE);
+                    }
+                });
     }
 
     public void updateList(boolean increaseList) {

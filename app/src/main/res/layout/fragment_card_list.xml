@@ -12,6 +12,7 @@
         android:gravity="center"
         android:layout_gravity="right"
         android:background="@drawable/to_top_button"
+        android:visibility="gone"
         android:layout_marginTop="12dp"
         android:layout_marginRight="12dp"/>
 
