@@ -9,7 +9,7 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.lcarrasco.data.LoadNews;
@@ -19,10 +19,12 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements CardsListFragment.OnCardSelected,
-                   CardsListFragment.OnListBottomReached {
+                   CardsListFragment.OnListBottomReached,
+                   LoadingDialogFragment.RetryRequest {
 
     private SwipeRefreshLayout swipeContainer;
     private int NO_INCREASE_NEWS_LIST = 0;
+    final LoadingDialogFragment loadingFragment = new LoadingDialogFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,30 +33,8 @@ public class MainActivity extends AppCompatActivity
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        final LoadingDialogFragment dialogFragment = new LoadingDialogFragment();
-        dialogFragment.show(getSupportFragmentManager(), "Sample Fragment");
+        buildNewsRequest();
 
-        LoadNews.buildNewsRequest(this, null, NO_INCREASE_NEWS_LIST, new LoadNews.OnFinishLoading() {
-            @Override
-            public void onFinishLoading(List<News> newsList) {
-                if (dialogFragment.isVisible())
-                    dialogFragment.dismiss();
-
-                toolbar.setVisibility(View.VISIBLE);
-                try {
-                    if (newsList != null && newsList.size() > 0)
-                        getSupportFragmentManager()
-                            .beginTransaction()
-                            .add(R.id.activity_main, CardsListFragment.getInstance(newsList), getString(R.string.fragment_cards))
-                            .commit();
-                    else
-                        //TODO show fragment of dificuldtades tecnicas
-                        System.out.println("No hay noticias nuevas disponibles");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
         if (swipeContainer != null) {
             swipeContainer.setDistanceToTriggerSync(200);
@@ -101,6 +81,34 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    void buildNewsRequest() {
+        if (!loadingFragment.isVisible())
+            loadingFragment.show(getSupportFragmentManager(), "Sample Fragment");
+
+        LoadNews.buildNewsRequest(this, null, NO_INCREASE_NEWS_LIST, new LoadNews.OnFinishLoading() {
+            @Override
+            public void onFinishLoading(List<News> newsList) {
+                try {
+                    if (newsList != null && newsList.size() > 0) {
+                        if (loadingFragment.isVisible())
+                            loadingFragment.dismiss();
+
+                        getSupportFragmentManager()
+                                .beginTransaction()
+                                .add(R.id.activity_main, CardsListFragment.getInstance(newsList), getString(R.string.fragment_cards))
+                                .commit();
+                    }
+                    else {
+                        loadingFragment.showReloadButton();
+                        Toast.makeText(getApplicationContext(), "No hay noticias nuevas disponibles", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
     private void buildNewsRequest(final String query, final int id) {
         LoadNews.buildNewsRequest(getApplicationContext(), query, id, new LoadNews.OnFinishLoading() {
             @Override
@@ -123,5 +131,10 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onListBottomReached(int id) {
         buildNewsRequest(null, id);
+    }
+
+    @Override
+    public void retryRequest() {
+        buildNewsRequest();
     }
 }

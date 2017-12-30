@@ -9,10 +9,10 @@ import android.text.method.LinkMovementMethod;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.TextView;
 
 import com.bluejamesbond.text.DocumentView;
-import com.bluejamesbond.text.style.TextAlignment;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.gson.Gson;
 import com.lcarrasco.data.NewsUtils;
@@ -42,7 +42,7 @@ public class NewsDetailsActivity extends AppCompatActivity {
         TextView urlSrcTV = (TextView) findViewById(R.id.url);
         TextView titleTV = (TextView) findViewById(R.id.title);
         TextView dateTV = (TextView) findViewById(R.id.date);
-        TextView newsDesc = (TextView) findViewById(R.id.newsDesc);
+        WebView desc = (WebView) findViewById(R.id.newsDesc);
         DocumentView description = (DocumentView) findViewById(R.id.newsDescription);
 
 
@@ -52,9 +52,9 @@ public class NewsDetailsActivity extends AppCompatActivity {
         urlSrcTV.setMovementMethod(LinkMovementMethod.getInstance());
         titleTV.setText(currentNews.getTitle());
         dateTV.setText(NewsUtils.getDate(currentNews.getCreatedAt()));
-        newsDesc.setText(Html.fromHtml(currentNews.getContent()));
+        desc.loadDataWithBaseURL(null, "<style>img{display: block; height: auto !important; width: 100%;}iframe{display: block; align: center; height: 12em; width: 100%;}body{color:#808080; text-align:justify}</style>" + currentNews.getContent(), "text/html", "charset=UTF-8", null);
+        desc.getSettings().setJavaScriptEnabled(true);
         description.setText(Html.fromHtml(currentNews.getContent()));
-
 
         if (currentNews.getCategory() == null || currentNews.getCategory().isEmpty())
             categoryTV.setVisibility(View.GONE);

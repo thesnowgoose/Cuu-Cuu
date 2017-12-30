@@ -3,35 +3,17 @@ package com.lcarrasco.chihuahua_noticias;
 
 import android.app.Activity;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-
-import com.lcarrasco.data.LoadNews;
+import android.widget.Button;
 import com.lcarrasco.model.News;
 
-import java.security.Timestamp;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class CardsListFragment extends Fragment {
 
@@ -78,26 +60,42 @@ public class CardsListFragment extends Fragment {
         final Activity activity = getActivity();
         final View view = inflater.inflate(R.layout.fragment_card_list, container, false);
         final RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+        final Button btn_toTop = (Button) view.findViewById(R.id.btn_toTop);
+        btn_toTop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                recyclerView.getLayoutManager().scrollToPosition(0);
+            }
+        });
         adapter = new CardAdapter(activity, newsList);
         try {
             recyclerView.setHasFixedSize(true);
-            recyclerView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false));
+            final RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false);
+            recyclerView.setLayoutManager(layoutManager);
             recyclerView.setAdapter(adapter);
             recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                     super.onScrollStateChanged(recyclerView, newState);
+
+                    if (((LinearLayoutManager) layoutManager).findFirstVisibleItemPosition() == 0)
+                        btn_toTop.setVisibility(View.GONE);
                 }
 
                 @Override
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                    int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager())
+                    int lastVisibleItemPosition = ((LinearLayoutManager) layoutManager)
                             .findLastCompletelyVisibleItemPosition();
                     if (lastVisibleItemPosition != RecyclerView.NO_POSITION &&
                         lastVisibleItemPosition == recyclerView.getAdapter().getItemCount() - 1) {
                         lastid = adapter.getLastID();
                         bottomReachedListener.onListBottomReached(lastid);
                     }
+
+                    if(dy < 0) // If scrolls upwards
+                        btn_toTop.setVisibility(View.VISIBLE);
+                    else
+                        btn_toTop.setVisibility(View.GONE);
                 }
             });
         } catch (Exception e) {

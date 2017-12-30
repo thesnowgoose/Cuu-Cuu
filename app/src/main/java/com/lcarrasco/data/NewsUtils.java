@@ -4,7 +4,6 @@ import android.net.Uri;
 
 import com.lcarrasco.chihuahua_noticias.R;
 
-import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.regex.Matcher;
@@ -46,4 +45,5 @@ public class NewsUtils {
 
         return newDateString;
     }
+
 }

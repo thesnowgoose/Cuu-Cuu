@@ -5,6 +5,7 @@
 
     <string name="source">Fuente: </string>
     <string name="loading">Cargando...</string>
+    <string name="reload">Intentar de nuevo</string>
     <string name="noNewsDetected">No se pudo encontar noticas</string>
     <string name="sharedCuuCuu">Compartido por CuuCuu</string>
 

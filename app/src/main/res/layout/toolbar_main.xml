@@ -8,5 +8,4 @@
     android:background="@color/colorPrimary"
     android:elevation="4dp"
     android:theme="@style/ToolbarTheme"
-    android:visibility="gone"
     app:titleTextAppearance="@style/Toolbar.TitleText" />

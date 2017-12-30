@@ -1,9 +1,9 @@
 package com.lcarrasco.data;
 
 import android.content.Context;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
-import com.lcarrasco.chihuahua_noticias.ChihuahuaNoticiasApp;
 import com.lcarrasco.chihuahua_noticias.R;
 import com.lcarrasco.model.INewsApp;
 import com.lcarrasco.model.News;
@@ -19,14 +19,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 /**
  * Created by lcarrasco on 7/7/16.
  */
-public class LoadNews {
+public class LoadNews extends AppCompatActivity {
 
     private static OnFinishLoading finish;
     private static List<News> newsList;
-
-    public interface OnFinishLoading {
-        void onFinishLoading(List<News> newsList);
-    }
 
     public static void buildNewsRequest(Context context, String query, int id, final OnFinishLoading loading) {
         finish = loading;
@@ -72,5 +68,9 @@ public class LoadNews {
 
     private static void finishLoading() {
         finish.onFinishLoading(newsList);
+    }
+
+    public interface OnFinishLoading {
+        void onFinishLoading(List<News> newsList);
     }
 }
