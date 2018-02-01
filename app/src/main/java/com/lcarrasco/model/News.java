@@ -8,6 +8,9 @@ public class News {
     @SerializedName("articleId")
     @Expose
     private Integer articleId;
+    @SerializedName("id")
+    @Expose
+    private Integer id;
     @SerializedName("title")
     @Expose
     private String title;
@@ -38,6 +41,14 @@ public class News {
     @SerializedName("updatedAt")
     @Expose
     private String updatedAt;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public Integer getArticleId() {
         return articleId;

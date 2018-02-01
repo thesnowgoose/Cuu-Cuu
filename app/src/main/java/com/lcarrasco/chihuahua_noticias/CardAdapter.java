@@ -98,7 +98,10 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return newsList.size();
+        if (newsList != null)
+            return newsList.size();
+        else
+            return 0;
     }
 
     public void setNewList(boolean increaseList, List<News> models, Context context) {
@@ -113,6 +116,6 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
     }
 
     int getLastID() {
-        return newsList.get(newsList.size() - 1).getArticleId();
+        return newsList.get(newsList.size() - 1).getId();
     }
 }
